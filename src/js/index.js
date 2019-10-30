@@ -1,25 +1,159 @@
+"use-strict";
 
-var $status = $('.pagingInfo');
-var $slickElement = $('.slideshow');
+var tab; // заголовок вкладки
+var tabContent; // блок содержащий контент вкладки
 
-$slickElement.on('init reInit afterChange', function (event, slick, currentSlide, nextSlide) {
-    //currentSlide is undefined on init -- set it to 0 in this case (currentSlide is 0 based)
-    var i = (currentSlide ? currentSlide : 0) + 1;
-    $status.text(i + '/' + slick.slideCount);
+var tabPopUp; // заголовок вкладки
+var tabPopUpContent; // блок содержащий контент вкладки
+
+window.onload = function () {
+
+    tabPopUpContent = document.getElementsByClassName('popupContent');
+    tabPopUp = document.getElementsByClassName('popup');
+    hideTabsPopUPContent(1);
+
+    tabContent = document.getElementsByClassName('tab-content');
+    tab = document.getElementsByClassName('tab');
+    hideTabsContent(1);
+
+
+}
+
+document.getElementById('tabs').onclick = function (event) {
+    var target = event.target;
+    if (target.className == 'tab') {
+        for (var i = 0; i < tab.length; i++) {
+            if (target == tab[i]) {
+                showTabsContent(i);
+                break;
+            }
+        }
+    }
+}
+
+function hideTabsContent(a) {
+    for (var i = a; i < tabContent.length; i++) {
+        tabContent[i].classList.remove('show');
+        tabContent[i].classList.add("hide");
+        tab[i].classList.remove('whiteborder');
+    }
+}
+
+function showTabsContent(b) {
+    if (tabContent[b].classList.contains('hide')) {
+        hideTabsContent(0);
+        tab[b].classList.add('whiteborder');
+        tabContent[b].classList.remove('hide');
+        tabContent[b].classList.add('show');
+    }
+}
+
+
+
+document.getElementById('tabPopUp').onclick = function (e) {
+    var target = e.target;
+    if (target.className == 'popup') {
+        for (var i = 0; i < tabPopUp.length; i++) {
+            if (target == tabPopUp[i]) {
+                showTabsPopUPContent(i);
+                break;
+            }
+        }
+    }
+}
+
+function hideTabsPopUPContent(a) {
+    for (var i = a; i < tabPopUpContent.length; i++) {
+        tabPopUpContent[i].classList.remove('show');
+        tabPopUpContent[i].classList.add("hide");
+        tabPopUp[i].classList.remove('active-pop-up');
+    }
+}
+
+function showTabsPopUPContent(b) {
+    if (tabPopUpContent[b].classList.contains('hide')) {
+        hideTabsPopUPContent(0);
+        tabPopUp[b].classList.add('active-pop-up');
+        tabPopUpContent[b].classList.remove('hide');
+        tabPopUpContent[b].classList.add('show');
+    }
+}
+
+
+const tab1 = document.querySelector('#tab1');
+const tab2 = document.querySelector('#tab2');
+const tab3 = document.querySelector('#tab3');
+const progresNav = document.getElementById('progres-nav');
+
+tab1.addEventListener("click", function () {
+    progresNav.classList.remove('end');
+    progresNav.classList.remove('center');
+    progresNav.classList.add('start');
 });
 
-$slickElement.slick({
-    prevArrow: '<button class="slide-arrow prev-arrow"><svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="13.5" cy="13.5" r="13" stroke="#5E239D" stroke-opacity="0.5" /><path d="M17.7911 13.8536C17.9863 13.6583 17.9863 13.3417 17.7911 13.1464L14.6091 9.96447C14.4138 9.7692 14.0972 9.7692 13.902 9.96447C13.7067 10.1597 13.7067 10.4763 13.902 10.6716L16.7304 13.5L13.902 16.3284C13.7067 16.5237 13.7067 16.8403 13.902 17.0355C14.0972 17.2308 14.4138 17.2308 14.6091 17.0355L17.7911 13.8536ZM9.5625 14H17.4375V13H9.5625V14Z" fill="#5E239D" /></svg></button>',
-    nextArrow: '<button class="slide-arrow next-arrow"><svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg"><circle r="13" transform="matrix(-1 0 0 1 13.5 13.5)" stroke="#5E239D" stroke-opacity="0.5" /><path d="M9.20895 13.8536C9.01368 13.6583 9.01368 13.3417 9.20895 13.1464L12.3909 9.96447C12.5862 9.7692 12.9028 9.7692 13.098 9.96447C13.2933 10.1597 13.2933 10.4763 13.098 10.6716L10.2696 13.5L13.098 16.3284C13.2933 16.5237 13.2933 16.8403 13.098 17.0355C12.9028 17.2308 12.5862 17.2308 12.3909 17.0355L9.20895 13.8536ZM17.4375 14H9.5625V13H17.4375V14Z" fill="#5E239D" /></svg></button>'
+tab2.addEventListener("click", function () {
+    progresNav.classList.remove('start');
+    progresNav.classList.remove('end');
+    progresNav.classList.add('center');
 });
 
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
+tab3.addEventListener("click", function () {
+    progresNav.classList.remove('center');
+    progresNav.classList.add('end');
+});
 
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-        });
+const busines = document.querySelector('#busines');
+const personal = document.querySelector('#personal');
+
+busines.addEventListener("click", function () {
+    this.classList.add('active');
+    personal.classList.remove('active');
+});
+
+personal.addEventListener("click", function () {
+    this.classList.add('active');
+    busines.classList.remove('active');
+});
+
+
+const siginUp = document.querySelector('#sign-up');
+
+const logIn = document.querySelector('#log-in');
+
+logIn.addEventListener("click", function () {
+    CheckValidation();
+    event.preventDefault();
+});
+
+siginUp.addEventListener("click", function () {
+    CheckValidation();
+    event.preventDefault();
+});
+
+function CheckValidation() {
+    const input = document.querySelectorAll('.input');
+    for (let i = 0; i < input.length; i++) {
+        if (input[i].value == '') {
+            let formGroup = input[i].closest(".form-group");
+            console.log(formGroup);
+            formGroup.classList.add('error');
+        }
+    }
+
+}
+
+const error = document.querySelectorAll('.input');
+
+for (let i = 0; i < error.length; i++) {
+    error[i].addEventListener('click', function () {
+        removeError();
     });
-});
+}
 
+
+function removeError() {
+    const formGroupError = document.querySelectorAll('.form-group');
+    for (let i = 0; i < formGroupError.length; i++) {
+        formGroupError[i].classList.remove('error');
+    }
+}
